@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}{% block top-title %}首页{% endblock %}{% endblock %}
+
+{% block head %}
+    <style>
+        .mdui-card.cover, .mdui-grid-tile.cover {
+            padding: 5px 10px;
+        }
+
+        img.cover {
+            width: 100%;
+            height: auto;
+        }
+
+        .mdui-grid-tile-actions {
+            background: #00000078;
+        }
+
+        .mdui-panel-item {
+            height: auto;
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+
+        .mdui-panel-item-header {
+            height: 64px;
+        }
+
+        .mdui-panel-item-body {
+            height: auto;
+        }
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div class="mdui-panel" mdui-panel>
+        {% for category in categorys %}
+
+
+            <div class="mdui-panel-item mdui-panel-item-open">
+                <div class="mdui-panel-item-header">{{ category.name }}</div>
+                <div class="mdui-panel-item-body">
+
+                    <div class="row">
+                        {% for subject in category.subjects %}
+                            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4 mdui-col-lg-2 mdui-col-xl-2">
+                                <div class="mdui-grid-tile cover">
+                                    <a href="{% url 'subject' subject.id %}"><img class="cover mdui-img-rounded mdui-shadow-8" src="{{ subject.cover }}"/></a>
+                                    <div class="mdui-grid-tile-actions">
+                                        <div class="mdui-grid-tile-text">
+                                            <div class="mdui-grid-tile-title">
+                                                <a class="mdui-text-color-white-text" title="{{ subject.name }}"
+                                                   href="{% url 'subject' subject.id %}">{{ subject.name }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="mdui-grid-tile-buttons">
+                                            <button class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">star_border</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+{% endblock %}

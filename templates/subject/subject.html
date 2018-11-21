@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <style>
+        .info {
+            padding-top: 20px;
+        }
+    </style>
+
+{% endblock %}
+{% block title %}{% block top-title %}{{ subject.name }}{% endblock %}{% endblock %}
+{% block content %}
+    <div class="info">
+        <div class="mdui-table-fluid ">
+            <table class="mdui-table">
+                <thead>
+                </thead>
+                <tbody>
+                <tr>
+                    <td rowspan="100" width="300">
+                        <div class="mdui-grid-tile">
+                            <img class="mdui-img-rounded mdui-shadow-4"
+                                                        src="{{ subject.cover }}"/>
+                        </div>
+                    </td>
+                    <td>{{ subject.name }}</td>
+
+                </tr>
+                <tr>
+                    <td>{{ subject.category.name }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% for line in lines %}
+
+        <div class="mdui-typo">
+            <h2>{{ line.name }}</h2>
+            <hr/>
+        </div>
+        <div class="mdui-row">
+            {% for video in line.videos %}
+
+                <div class="mdui-col-xs-2 mdui-col-sm-2 mdui-col-md-2 mdui-col-lg-1 mdui-col-xl-1">
+                    <a class="mdui-btn mdui-btn-raised mdui-ripple" href="{% url 'play' video.id %}">{{ video.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endfor %}
+
+
+
+{% endblock %}

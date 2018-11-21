@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <style>
+        .play {
+
+            padding-top: 20px;
+        }
+
+        video {
+            width: 100%;
+        }
+
+        video::-internal-media-controls-download-button {
+            display: none;
+        }
+
+        video::-webkit-media-controls-enclosure {
+            overflow: hidden;
+        }
+
+        video::-webkit-media-controls-panel {
+            width: calc(100% + 30px);
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block title %}{% block top-title %}{{ video.line.subject.name }} - {{ video.name }}{% endblock %}{% endblock %}
+{% block top-link %}{% url 'subject' video.line.subject.id %}{% endblock %}
+{% block content %}
+    <div class="play">
+        <div class="mdui-typo">
+            <h3>{{ video.line.subject.name }} - {{ video.name }}</h3>
+            <hr/>
+        </div>
+        <video class="mdui-video-fluid" autoplay controls="controls" controlslist="nodownload">
+            <source src="{{ video.link }}" type="video/mp4">
+        </video>
+
+    </div>
+{% endblock %}

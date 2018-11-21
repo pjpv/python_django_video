@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{% static 'css/mdui.css' %}">
+    {% block head %}{% endblock %}
+    <style>
+
+
+    </style>
+</head>
+<body class="mdui-theme-primary-indigo">
+<div class="mdui-toolbar mdui-color-theme">
+{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>#}
+    <a href="/" class="mdui-typo-headline">ZFDev</a>
+    <a href="{% block top-link %}javascript:;{% endblock %}" class="mdui-typo-title">{% block top-title %}{% endblock %}</a>
+{#    <span class="mdui-typo-title"></span>#}
+    <div class="mdui-toolbar-spacer"></div>
+{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>#}
+{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>#}
+{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>#}
+</div>
+<div class="mdui-container">
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<script src="{% static 'js/mdui.js' %}"></script>
+</body>
+</html>
