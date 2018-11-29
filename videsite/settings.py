@@ -28,7 +28,7 @@ SECRET_KEY = 'mdb-!42-*r5=3@7dd64%4(pse=lg^1la4iyp#!62zl0szr^8(7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.0.88']
 
 # Application definition
 

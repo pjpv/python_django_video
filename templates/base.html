@@ -8,26 +8,79 @@
     <link rel="stylesheet" href="{% static 'css/mdui.css' %}">
     {% block head %}{% endblock %}
     <style>
+        .breadcrumbs {
+            margin: 10px 0px;
+        }
 
+        .breadcrumbs > .mdui-chip {
+            background-color: transparent !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+        }
+
+        /* 最后一个不是链接 */
+        .breadcrumbs .mdui-chip:last-child {
+            cursor: unset;
+        }
+        .mdui-chip-title{
+            padding: 0;
+        }
+
+        .subtitle {
+            margin: 10px 0 0 0 !important;
+        }
 
     </style>
 </head>
 <body class="mdui-theme-primary-indigo">
+
+{#  ---- 工具栏 START----  #}
 <div class="mdui-toolbar mdui-color-theme">
-{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>#}
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
     <a href="/" class="mdui-typo-headline">ZFDev</a>
-    <a href="{% block top-link %}javascript:;{% endblock %}" class="mdui-typo-title">{% block top-title %}{% endblock %}</a>
-{#    <span class="mdui-typo-title"></span>#}
+    <span class="mdui-typo-title">
+        {% block top-title %}{% endblock %}</span>
+    {#    <span class="mdui-typo-title"></span>#}
     <div class="mdui-toolbar-spacer"></div>
-{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>#}
-{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>#}
-{#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>#}
+    {#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>#}
+    {#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>#}
+    {#    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>#}
 </div>
+
+{#  ---- 工具栏 END----  #}
 <div class="mdui-container">
+    {#  ---- 面包屑 START----  #}
+    <div class="breadcrumbs mdui-shadow-1 mdui-color-theme-50">
+        {% block breadcrumb %}
+            <div class="mdui-chip">
+                <a href="/" class="mdui-chip-title mdui-text-color-indigo">首页</a>
+            </div>
+            {% for breadcrumb in breadcrumbs %}
+                /
+                <div class="mdui-chip">
+                    <a {% if breadcrumb.url %}href="{{ breadcrumb.url }}"{% endif %}
+                       class="mdui-chip-title mdui-text-color-indigo">{{ breadcrumb.title }}</a>
+                </div>
+            {% endfor %}
+
+        {% endblock %}
+        {#  ---- 面包屑 END----  #}
+    </div>
     <div class="content">
+        {#  ---- 内容 START----  #}
         {% block content %}{% endblock %}
+        {#  ---- 内容 END----  #}
     </div>
 </div>
+
+{#  ---- 脚本 START----  #}
 <script src="{% static 'js/mdui.js' %}"></script>
+<script>
+    {#  屏蔽右键  #}
+    {#    document.oncontextmenu = new Function("return false");#}
+</script>
+{% block script %}{% endblock %}
+
+{#  ---- 脚本 END----  #}
 </body>
 </html>

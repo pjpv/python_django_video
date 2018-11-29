@@ -13,15 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
-from .views import IndexView
+from .views import IndexView, ZhiboView
 from subject.views import subjectView
-from video.views import playView
+from video.views import playView, html5View
+from category.views import categoryView
 
 urlpatterns = [
     url('^$', IndexView.as_view(), name='index'),
-    url('s/(?P<id>\d+).html', subjectView.as_view(), name='subject'),
-    url('(?P<id>\d+)/play.html', playView.as_view(), name='play'),
+    url('^(?P<id>\d+).html', categoryView.as_view(), name='category'),
+    url('^html5.html', html5View.as_view(), name='html5'),
+    url('^zhibo.html', ZhiboView.as_view(), name='zhibo'),
+    url('^(?P<cid>\d+)/(?P<id>\d+).html', subjectView.as_view(), name='subject'),
+    url('^(?P<cid>\d+)/(?P<subid>\d+)/(?P<id>\d+).html', playView.as_view(), name='play'),
 ]

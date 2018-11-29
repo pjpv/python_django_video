@@ -8,12 +8,13 @@ from subject.models import subjectModel
 
 class IndexView(View):
     def get(self, request):
-        categorys = categoryModel.objects.all()
+        categorys = categoryModel.objects.all().order_by('order')
         c_list = []
         for c in categorys:
-            s = subjectModel.objects.filter(category=c)[:6]
+            s = subjectModel.objects.filter(category=c).order_by('-pub_date', '-update_time')[:6]
             c_list.append({
                 'name': c.name,
+                'id': c.id,
                 'subjects': s
             })
         content = {
@@ -21,3 +22,10 @@ class IndexView(View):
         }
 
         return render(request, 'front/index.html', context=content)
+class ZhiboView(View):
+    def get(self, request):
+
+        content = {
+        }
+
+        return render(request, 'front/zhibo.html', context=content)

@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
+from django.conf import settings
+from django.contrib.staticfiles.views import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url('^(?P<path>crossdomain.xml)$', serve, name='crossdomain'),
     url('', include('front.urls'), name='front')
 ]

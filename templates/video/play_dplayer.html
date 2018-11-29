@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <style>
+        {#        .play {#}
+        {#            padding-top: 20px;#}
+        {#        }#}
+        #player {
+
+            background-image: url(https://img.zcool.cn/community/01474f5bf2203ba80120925223dc3d.gif);
+            background-position: center;
+            background-repeat: no-repeat;
+        {#            background-attachment: fixed;#}
+        }
+
+        video {
+            width: 100%;
+        }
+
+        .dplayer-menu {
+            padding: 0 !important;
+        }
+
+        .dplayer-menu > .dplayer-menu-item:not(:first-child) {
+            display: none !important;
+        }
+
+        .dplayer-switch i {
+            color: white;
+            font-size: 20px;
+        }
+
+        #switch {
+            position: unset !important;
+        }
+
+        .dplayer-switch {
+            display: inline;
+            height: 100% !important;
+            width: auto !important;
+        }
+    </style>
+    <meta name="referrer" content="never">
+    <link rel="stylesheet" href="{% static 'css/DPlayer.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/allofthelights.css' %}">
+{% endblock %}
+
+{% block title %}{% block top-title %}{{ video.line.subject.name }} - {{ video.name }}{% endblock %}{% endblock %}
+
+{% block content %}
+    {#    <div id="switch" class="mdui-hidden"></div>#}
+    <div class="play">
+        {#        <div class="mdui-typo">#}
+        {#            <h3>{{ video.line.subject.name }} - {{ video.name }}</h3>#}
+        {#            <hr/>#}
+        {#        </div>#}
+        {#        <video class="mdui-video-fluid" autoplay controls="controls" controlslist="nodownload">#}
+        {#            <source src="{{ video.link }}" type="video/mp4">#}
+        {#        </video>#}
+        <div id="player"></div>
+        {#        <iframe src="http://s1.ananas.chaoxing.com/video/0b/fa/64/abedb701801c4d734f8ccc0602a528a4/hd.mp4?at_=1542878245765&ak_=56dc9c3413ef1eeef6f92fb0d690cec5&ad_=4d04b6caa95ff5292c0a4a204d43384f"#}
+        {#                frameborder="0" width="100%" height="500px"></iframe>#}
+    </div>
+
+
+
+
+    <div class="lines mdui-shadow-1 mdui-color-theme-50">
+        {% include 'line/line.html' %}
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+    <script src="https://cdn.staticfile.org/hls.js/0.10.1/hls.min.js"></script>
+    <script src="https://cdn.staticfile.org/dashjs/2.9.2/dash.all.min.js"></script>
+    <script src="https://cdn.staticfile.org/flv.js/1.4.2/flv.min.js"></script>
+    <script src="{% static 'js/DPlayer.min.js' %}"></script>
+    <script>
+        var $$ = mdui.JQ;
+    </script>
+    <script src="https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/allofthelights.js' %}"></script>
+    <script>
+        var link = '{{ video.link|safe }}';
+        function dp_play() {
+
+            const dp = new DPlayer({
+                container: document.getElementById('player'),
+                screenshot: false,
+                {#                    hotkey: true,#}
+                {#                    autoplay: true,#}
+                logo: '{% static 'image/logo4.png' %}',
+                video: {
+                    url: link,
+                    {#                        pic: 'http://r1.ykimg.com/050C00005AAB8C6F859B5E041209F2BD',#}
+                    {#                thumbnails: 'thumbnails.jpg'#}
+                },
+                {#            subtitle: {#}
+                {#                url: 'webvtt.vtt'#}
+                {#            },#}
+                {#            danmaku: {#}
+                {#                id: 'demo',#}
+                {#                api: 'https://api.prprpr.me/dplayer/'#}
+                {#            }#}
+                contextmenu: [
+                    {
+                        text: '关灯',
+                        click: function (player) {
+                            var oldText = this.text;
+                            var newText = '开灯';
+                            if ('关灯' === oldText) {
+                                newText = '开灯';
+                                $('#switch').click();
+
+                            } else {
+                                newText = '关灯';
+                                $('#switch_off').click();
+                            }
+                            $('.dplayer-menu .dplayer-menu-item > a:Contains("' + oldText + '")').text(newText);
+                            this.text = newText;
+                        }
+                    }
+                ],
+            });
+            dp.on('error', function () {
+                console.log('player error');
+            });
+            dp.on('abort', function () {
+                console.log('player abort');
+            });
+            dp.on('canplay', function () {
+                console.log('player canplay');
+                lights();
+            });
+            dp.on('playing', function () {
+                console.log('player playing');
+            });
+        }
+        function lights() {
+
+            if ($('#switch').length === 0) {
+                $('.dplayer-setting').after(`
+<div class="dplayer-switch" id="switch_off" style="display: none">
+            <button class="dplayer-icon dplayer-setting-icon" data-balloon="开灯" data-balloon-pos="up">
+                <i class="mdui-icon material-icons">&#xe3a6;</i>
+            </button>
+
+        </div>
+<div class="dplayer-switch" id="switch" style="
+    display: inline-block;
+    height: 100%;
+">
+            <button class="dplayer-icon dplayer-setting-icon" data-balloon="关灯" data-balloon-pos="up">
+                <i class="mdui-icon material-icons">&#xe3a7;</i>
+            </button>
+        </div>`)
+
+                $('#switch_off').click(function () {
+
+                    $('#switch').show();
+                    $('#switch_off').hide();
+                });
+                $('#switch').click(function () {
+                    $('#switch_off').show();
+                    $('#switch').hide();
+                });
+                $("#player").allofthelights();
+            }
+        }
+
+        dp_play();
+
+
+    </script>
+
+{% endblock %}

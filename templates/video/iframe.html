@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <style>
+        video {
+            width: 100%;
+        }
+
+        #player {
+            width: 100%;
+            height: 550px;
+            background-image: url(https://img.zcool.cn/community/01474f5bf2203ba80120925223dc3d.gif);
+            background-position: center;
+            background-repeat: no-repeat;
+{#            background-attachment: fixed;#}
+        }
+
+        @media screen and (min-width: 1201px) {
+            #player {
+                height: 650px;
+            }
+        }
+
+        /* css注释：设置了浏览器宽度不小于1201px时 abc 显示1200px宽度 */
+
+        @media screen and (max-width: 1200px) {
+            #player {
+                height: 550px;
+            }
+        }
+
+        /* 设置了浏览器宽度不大于1200px时 abc 显示900px宽度 */
+
+        @media screen and (max-width: 901px) {
+            #player {
+                height: 400px;
+            }
+        }
+
+        /* 设置了浏览器宽度不大于901px时 abc 显示200px宽度 */
+
+        @media screen and (max-width: 500px) {
+            #player {
+                height: 300px;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            #player {
+                height: 250px;
+            }
+        }
+
+        /* 设置了浏览器宽度不大于500px时 abc 显示100px宽度 */
+    </style>
+    <meta name="referrer" content="never">
+    {#    <link rel="stylesheet" href="{% static 'css/allofthelights.css' %}">#}
+{% endblock %}
+
+{% block title %}{% block top-title %}{{ video.line.subject.name }} - {{ video.name }}{% endblock %}{% endblock %}
+
+{% block content %}
+    <div id="switch" class="">全屏观看（按F11退出）</div>
+    <div class="play">
+        <div id="player">
+            <iframe name="ifm" class="fan mdui-container" src="{{ video.link }}" style="
+    height: 100%;
+    width: 100%;
+" frameborder="no" scrolling="no" allowfullscreen="true" marginwidth="0" marginheight="0" vspace="0" hspace="0"
+                    align="middle"></iframe>
+        </div>
+    </div>
+
+    <div class="lines mdui-shadow-1 mdui-color-theme-50">
+        {% include 'line/line.html' %}
+    </div>
+
+{% endblock %}
+
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'ckplayer/ckplayer.js' %}"></script>
+    {#    <script>#}
+    {#        var $$ = mdui.JQ;#}
+    {#    </script>#}
+    {#    <script src="https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>#}
+    {#    <script src="{% static 'js/allofthelights.js' %}"></script>#}
+    <script>
+        var link = '{{ video.link|safe }}';
+
+        document.getElementById('switch').onclick = function () {
+            document.getElementById('player').webkitRequestFullscreen();
+
+        }
+    </script>
+
+{% endblock %}

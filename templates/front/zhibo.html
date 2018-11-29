@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0px;
+            font-family: "Microsoft YaHei", YaHei, "微软雅黑", SimHei, "黑体";
+            font-size: 14px
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+
+    <div id="video" style="width: 100%; height: 550px;"></div>
+    <script type="text/javascript" src="{% static 'ckplayer/ckplayer.js' %}"></script>
+    <script type="text/javascript">
+        var videoObject = {
+            container: '#video', //容器的ID或className
+            variable: 'player',//播放函数名称
+            autoplay: false,
+            live: true,
+{#            video: 'rtmp://pull6.inke.cn/live/1542894701234427',#}
+{#            video: 'http://123.207.42.38/tvb.php?type=jade',#}
+            video: 'http://pullhls6.inke.cn/live/1542894701234427/playlist.m3u8',
+        };
+        var player = new ckplayer(videoObject);
+    </script>
+
+{% endblock %}

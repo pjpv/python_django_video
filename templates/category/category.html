@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+
+
+        img.cover {
+            width: 100%;
+            height: auto;
+        }
+
+        .cover a {
+            text-decoration: none;
+        }
+
+        div.cover {
+
+            width: 100%;
+            /*height: 0;*/
+            padding-bottom: 133.33%;
+            overflow: hidden;
+            background-position: center center;
+            background-repeat: no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            background-size: cover;
+        }
+
+        .mdui-grid-tile-actions {
+            background: none;
+            height: 10px;
+            max-height: 10px;
+            min-height: 10px;
+            bottom: 30px;
+            background-repeat: no-repeat;
+            /*background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.85));*/
+            background-image: linear-gradient(transparent, #607D8B);
+            color: #FFFFFF;
+            border-radius: 20px;
+            display: inline-flex;
+        }
+
+        .mdui-grid-tile.cover {
+            padding: 5px 10px;
+        }
+
+        .mdui-grid-tile-actions-top {
+            background: none;
+            color: black;
+        }
+
+        .link {
+            display: block;
+            padding-top: 10px;
+        }
+
+        .doc-footer-nav {
+            height: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}{% block top-title %}{{ category.name }}{% endblock %}{% endblock %}
+{% block content %}
+    {#    <div class="mdui-row-xs-2 mdui-row-sm-4 mdui-row-md-5 mdui-row-lg-6 mdui-row-xl-7 mdui-grid-list mdui-p-a-2 mdui-shadow-1">#}
+
+    <div class="mdui-row-xs-2 mdui-row-sm-3 mdui-row-md-6 mdui-row-lg-6 mdui-row-xl-6 mdui-grid-list mdui-color-theme-50">
+        {% for subject in subjects %}
+            {#            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4 mdui-col-lg-2 mdui-col-xl-2">#}
+            <div class="mdui-col">
+                <div class="mdui-grid-tile cover">
+                    <a href="{% url 'subject' subject.category_id subject.id %}">
+                        <div class="cover mdui-img-rounded mdui-shadow-8" src="{{ subject.cover }}"
+                             style="background-image: url({{ subject.cover }})"></div>
+                    </a>
+
+                    {% if subject.last_video %}
+                        <div class="mdui-grid-tile-actions">
+                            <div class="mdui-grid-tile-text">
+                                <div class="mdui-grid-tile-subtitle">
+                                    {#                                                    <i class="mdui-icon material-icons mdui-text-color-red-accent">new_releases</i>#}
+                                    <a class="mdui-text-color-white-text"
+                                       title="{{ subject.name }} [ {{ subject.last_video.name }} ]"
+                                       href="{% url 'play' category.id subject.id subject.last_video.id %}">
+                                        更新 [ {{ subject.last_video.name }} ]
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <a class="mdui-text-color-black-text mdui-text-truncate mdui-text-center link"
+                       title="{{ subject.name }}"
+                       href="{% url 'subject' category.id subject.id %}">{{ subject.name }}</a>
+                    {#                    <div class="mdui-grid-tile-actions">#}
+                    {#                        <div class="mdui-grid-tile-text">#}
+                    {#                            <div class="mdui-grid-tile-title">#}
+                    {#                                <a class="mdui-text-color-white-text" title="{{ subject.name }}"#}
+                    {#                                   href="{% url 'subject' subject.category_id subject.id %}">{{ subject.name }}</a>#}
+                    {#                            </div>#}
+                    {#                            <div class="mdui-grid-tile-subtitle">#}
+                    {#                                <i class="mdui-icon material-icons mdui-text-color-red-accent">new_releases</i>#}
+                    {#                                更新15集#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                                        <div class="mdui-grid-tile-buttons">#}
+                    {#                                            <button class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">star_border</i>#}
+                    {#                                            </button>#}
+                    {#                                        </div>#}
+                    {#                    </div>#}
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+    <div class="doc-footer-nav mdui-valign">
+        <div class="mdui-container">
+            <div class="mdui-row">
+                <div class="mdui-col-xs-6 mdui-col-sm-6 doc-footer-nav-left">
+                    <div class="doc-footer-nav-text mdui-text-right">
+
+                        {% if subjects.has_previous %}
+                            <a href="?p={{ subjects.previous_page_number }}" class="mdui-ripple">
+                                <i class="mdui-icon material-icons">arrow_back</i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mdui-col-xs-6 mdui-col-sm-6 doc-footer-nav-right">
+                    <div class="doc-footer-nav-text mdui-text-left">
+                        {% if subjects.has_next %}
+                            <a href="?p={{ subjects.next_page_number }}" class="mdui-ripple">
+                                <i class="mdui-icon material-icons">arrow_forward</i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -6,6 +6,7 @@
     <style>
         .mdui-card.cover, .mdui-grid-tile.cover {
             padding: 5px 10px;
+        {#            height: 250px;#}
         }
 
         img.cover {
@@ -13,8 +14,34 @@
             height: auto;
         }
 
+        .cover a {
+            text-decoration: none;
+        }
+
+        div.cover {
+            width: 100%;
+            /*height: 0;*/
+            padding-bottom: 133.33%;
+            overflow: hidden;
+            background-position: center center;
+            background-repeat: no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            background-size: cover;
+        }
+
         .mdui-grid-tile-actions {
-            background: #00000078;
+            background: none;
+            height: 10px;
+            max-height: 10px;
+            min-height: 10px;
+            bottom: 30px;
+            background-repeat: no-repeat;
+            /*background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.85));*/
+            background-image: linear-gradient(transparent, #607D8B);
+            color: #FFFFFF;
+            border-radius: 20px;
+            display: inline-flex;
         }
 
         .mdui-panel-item {
@@ -31,41 +58,75 @@
             height: auto;
         }
 
+        .more {
+            right: 0;
+            position: absolute;
+        }
+
+        .link {
+            display: block;
+            padding-top: 10px;
+        }
+
+
     </style>
 
 {% endblock %}
 {% block content %}
-    <div class="mdui-panel" mdui-panel>
+    <div class="mdui-panel " mdui-panel>
         {% for category in categorys %}
 
 
-            <div class="mdui-panel-item mdui-panel-item-open">
-                <div class="mdui-panel-item-header">{{ category.name }}</div>
+            <div class="mdui-panel-item mdui-panel-item-open mdui-color-theme-50">
+                <div class="mdui-panel-item-header">{{ category.name }}
+                    <a class="mdui-btn mdui-ripple more" href="{% url 'category' category.id %}">更多</a>
+                </div>
                 <div class="mdui-panel-item-body">
 
-                    <div class="row">
+                    <div class="mdui-row-xs-2 mdui-row-sm-3 mdui-row-md-6 mdui-row-lg-6 mdui-row-xl-6 mdui-grid-list">
                         {% for subject in category.subjects %}
-                            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4 mdui-col-lg-2 mdui-col-xl-2">
+                            <div class="mdui-col">
                                 <div class="mdui-grid-tile cover">
-                                    <a href="{% url 'subject' subject.id %}"><img class="cover mdui-img-rounded mdui-shadow-8" src="{{ subject.cover }}"/></a>
-                                    <div class="mdui-grid-tile-actions">
-                                        <div class="mdui-grid-tile-text">
-                                            <div class="mdui-grid-tile-title">
-                                                <a class="mdui-text-color-white-text" title="{{ subject.name }}"
-                                                   href="{% url 'subject' subject.id %}">{{ subject.name }}</a>
+                                    <a href="{% url 'subject' category.id subject.id %}">
+                                        <div class="cover mdui-img-rounded mdui-shadow-8"
+                                             style="background-image: url({{ subject.cover }})"
+                                             src="{{ subject.cover }}"></div>
+                                    </a>
+                                    {% if subject.last_video %}
+
+                                        <div class="mdui-grid-tile-actions">
+                                            <div class="mdui-grid-tile-text">
+                                                {#                                            <div class="mdui-grid-tile-title">#}
+                                                {#                                                <a class="mdui-text-color-white-text" title="{{ subject.name }}"#}
+                                                {#                                                   href="{% url 'subject' category.id subject.id %}">{{ subject.name }}</a>#}
+                                                {#                                            </div>#}
+                                                <div class="mdui-grid-tile-subtitle">
+                                                    {#                                                    <i class="mdui-icon material-icons mdui-text-color-red-accent">new_releases</i>#}
+                                                    <a class="mdui-text-color-white-text"
+                                                       title="{{ subject.name }} [ {{ subject.last_video.name }} ]"
+                                                       href="{% url 'play' category.id subject.id subject.last_video.id %}">
+                                                        更新 [ {{ subject.last_video.name }} ]
+                                                    </a>
+                                                </div>
                                             </div>
+                                            {#                                        <div class="mdui-grid-tile-buttons">#}
+                                            {#                                            <button class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">star_border</i>#}
+                                            {#                                            </button>#}
+                                            {#                                        </div>#}
                                         </div>
-                                        <div class="mdui-grid-tile-buttons">
-                                            <button class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">star_border</i>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    {% endif %}
+
+                                    <a class="mdui-text-color-black-text mdui-text-truncate mdui-text-center link"
+                                       style="display: block;padding-top: 10px;" title="{{ subject.name }}"
+                                       href="{% url 'subject' category.id subject.id %}">{{ subject.name }}</a>
                                 </div>
                             </div>
 
                         {% endfor %}
                     </div>
-
+                    {#                    <div class="mdui-panel-item-actions">#}
+                    {#                        <button class="mdui-btn mdui-ripple mdui-float-right">更多</button>#}
+                    {#                    </div>#}
 
                 </div>
             </div>
