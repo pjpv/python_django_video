@@ -1,0 +1,14 @@
+.idea
+.idea/
+.DS_Store
+node_modules/
+.project
+dist
+dist/*
+# 把dist改成了static
+static
+static/*
+src/config/*.tmp
+src/config/env.js
+/index.html
+/index_prod.html

@@ -8,7 +8,7 @@ from line.models import lineModel
 
 class subjectModel(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, verbose_name='名称', help_text='名称', null=False)
+    name = models.CharField(max_length=50, verbose_name='主题名称', help_text='主题名称', null=False)
     category = models.ForeignKey('category.categoryModel', verbose_name='分类', null=True, on_delete=models.SET_NULL)
     cover = models.URLField(verbose_name='封面链接', help_text='封面链接', default='', null=True)  # 不打算本地存储
     STATE_CHOICES = (

@@ -5,6 +5,13 @@ from django.shortcuts import get_object_or_404
 from video.models import videoModel
 from line.models import lineModel
 
+# REST Framework
+from rest_framework import viewsets
+from rest_framework.generics import mixins
+from rest_framework.pagination import PageNumberPagination
+
+from video.serializers import VideoSerializer
+
 
 # Create your views here.
 class playView(View):
@@ -42,3 +49,25 @@ class playView(View):
 class html5View(View):
     def get(self, request):
         return render(request, 'video/html5.html')
+
+
+
+
+# Create your views here.
+
+class LinePagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    page_query_param = "page"
+    max_page_size = 100
+
+
+
+class VideoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                    viewsets.GenericViewSet):
+    """
+    列出所有的播放线路或者创建一个新的播放线路。
+    """
+    queryset = videoModel.objects.all().order_by('add_time')
+    serializer_class = VideoSerializer
+    pagination_class = LinePagination

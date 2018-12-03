@@ -41,15 +41,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders', # 跨域配置
+
     'category',
     'subject',
     'line',
     'video',
     'front',
+
+    'api',
+
+    'django_filters', # django_filters
+    'crispy_forms', # django-crispy-forms
+    'rest_framework', # django-rest-framework
+
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',    # 跨域配置
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -62,7 +72,11 @@ ROOT_URLCONF = 'videsite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            # os.path.join(BASE_DIR, 'apps/vuefront/'),
+            os.path.join(BASE_DIR, 'apps/iview/'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,4 +149,38 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'apps/front/static/'),
+    os.path.join(BASE_DIR, 'apps/vuefront/dist/static'),
+    os.path.join(BASE_DIR, 'apps/iview/static'),
+)
+
+
+
+# REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
+
+CRISPY_TEMPLATE_PACK = 'uni_form'
+
+
+# ------------------ 跨域配置 ------------------
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'zfdev.com',
+    '192.168.0.88:8080',
+    '127.0.0.1:8080',
+    '127.0.0.1:8000',
+)
+# CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 )
