@@ -1,7 +1,9 @@
+import env from '../config/env'
+
 export default {
     method: 'get',
     // 基础url前缀
-    baseURL: 'http://192.168.0.88:8000/api',
+    baseURL: env === 'production' ? '/api' : 'http://127.0.0.1:8000/api',
     // 请求头信息
     headers: {
         'Content-Type': 'application/json;charset=UTF-8'
