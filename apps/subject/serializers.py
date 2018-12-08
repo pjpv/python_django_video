@@ -5,9 +5,11 @@
 # @File :   serializers.py
 
 
+from django.conf import settings
+
 from rest_framework import serializers
 from subject.models import subjectModel
-from category.serializers import CategorySerializer
+from category.serializers import CategoryAppSerializer,CategorySerializer
 
 
 # class CategorySerializer(serializers.Serializer):
@@ -24,8 +26,29 @@ from category.serializers import CategorySerializer
 
 
 
-class SubjectSerializer(serializers.ModelSerializer):
+class SubjectAppSerializer(serializers.ModelSerializer):
+    '''
+    主题 序列化，用于前端展示
+    '''
     category = CategorySerializer()
+
+    class Meta:
+        model = subjectModel
+        fields = '__all__'
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+    '''
+    主题 序列化，用于后端数据
+    '''
+    pub_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    update_time = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    category_name = serializers.SerializerMethodField()
+
+    def get_category_name(self, obj):
+        if obj.category:
+            return obj.category.name
+        return ''
 
     class Meta:
         model = subjectModel

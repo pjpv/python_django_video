@@ -22,7 +22,7 @@
 </style>
 <template>
     <div class="index">
-        <Row style="">
+        <Row style="" v-if="categorys.length">
             <Col v-for="category in categorys" :key="category.id" span="24" class="category">
             <Card :bordered="true">
                 <p slot="title">
@@ -50,24 +50,21 @@
             </Card>
             </Col>
         </Row>
+        <loadingCard v-else></loadingCard>
     </div>
 </template>
 <script>
 
-//    import {getIndexList}  from '../api/api'
+    //    import {getIndexList}  from '../api/api'
     import SubjectCover from '../components/SubjectCover'
+    import loadingCard from '../components/loadingCard.vue'
     export default {
         components: {
-            SubjectCover
+            SubjectCover,
+            loadingCard
         },
-        beforeMount(){
-            this.$api.getIndexList().then(res => {
-                console.log(res);
-                this.categorys = res.results;
-            }, () => {
-                console.log('http get error')
-            })
-
+        created(){
+            this.init();
         },
         data(){
             return {
@@ -78,7 +75,24 @@
             backgroundImgUrl(url) {
                 return `background-image: url(${url});`;
             },
+            init(){
 
+                this.$api.getIndexList().then(res => {
+                    console.log(res);
+                    this.categorys = res.results;
+                }, () => {
+                    console.log('http get error')
+                })
+            }
+
+        },
+        watch: {
+            '$route' (to, from) {
+                console.log('Subject watch init');
+
+                if (from.name != 'index')
+                    this.init();
+            }
         },
     }
 </script>

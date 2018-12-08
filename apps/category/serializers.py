@@ -29,15 +29,21 @@ class SubjectNoCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoryAppSerializer(serializers.ModelSerializer):
     list = serializers.SerializerMethodField()
 
     def get_list(self, obj):
         # 显示6个最近更新的主题
         subjects = subjectModel.objects.filter(category=obj).order_by('-update_time')[:6]
-        serlalizers =  SubjectNoCategorySerializer(subjects, many=True)
+        serlalizers = SubjectNoCategorySerializer(subjects, many=True)
         return serlalizers.data
 
+    class Meta:
+        model = categoryModel
+        fields = '__all__'
+
+
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = categoryModel
         fields = '__all__'

@@ -49,7 +49,7 @@ Vue.prototype.$util = Util;
 const RouterConfig = {
     mode: 'history',
     routes: Routers,
-    base: '/v/',
+    base: '/',
 };
 const router = new VueRouter(RouterConfig);
 
@@ -86,7 +86,7 @@ export const app = new Vue({
         }
     },
     metaInfo: {
-        title: '',
+        title: '首页',
         titleTemplate: '%s | ZFDev影视',
     }
 });

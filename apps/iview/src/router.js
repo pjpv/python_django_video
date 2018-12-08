@@ -39,7 +39,7 @@ const routers = [{
         path: '/:cid/:sid/:vid',
         meta: {
             title: '播放',
-            keepAlive: true
+            keepAlive: false
         },
         component: (resolve) => require(['./views/play/play.vue'], resolve)
     },

@@ -4,10 +4,11 @@
             <div style="text-align:center">
                 <!--<div class="cover-img" :style="backgroundImgUrl(subject.cover)"></div>-->
                 <div class="cover-img">
+                    <div class="tips">{{subject.tips}}</div>
                     <img class="cover-img-i" v-lazy="subject.cover"/>
-                <div class="cover-mask">
-                    <Icon type="ios-play"/>
-                </div>
+                    <div class="cover-mask">
+                        <Icon type="ios-play"/>
+                    </div>
                 </div>
                 <h3 class="subject-title">{{ subject.name }}</h3>
             </div>
@@ -16,6 +17,7 @@
 </template>
 <script>
     export default {
+        name: 'SubjectCover',
         props: ['subject', 'category'],
         methods: {
             backgroundImgUrl(url) {
@@ -102,6 +104,7 @@
         height: 14em;
         overflow: hidden;
         padding: 5px;
+        height: calc(100vh / 4);
     }
 
     img.cover-img-i {
@@ -161,4 +164,12 @@
         color: white;
     }
 
+    .tips {
+        float: right;
+        position: absolute;
+        color: white;
+        right: 0;
+        background: #0000006b;
+        top: 5%;
+    }
 </style>

@@ -33,6 +33,7 @@
 </template>
 <script>
     export default {
+        name: 'TopMenu',
         data() {
             return {
                 selectCategory: 0,

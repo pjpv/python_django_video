@@ -23,7 +23,7 @@ export const getCategory = id => {
 
 export const getSubjects = (cid, page) => {
     if (cid) {
-        return axios({url: `/subjects/?category=${cid}&ordering=-pub_date,-update_time&page=${page}`, method: 'get'});
+        return axios({url: `/subjects/?category=${cid}&ordering=-update_time,order&page=${page}`, method: 'get'});
     } else {
         return {};
     }

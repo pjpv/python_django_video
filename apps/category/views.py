@@ -8,7 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from category.models import categoryModel
 from subject.models import subjectModel
-from category.serializers import CategorySerializer
+from category.serializers import CategorySerializer, CategoryAppSerializer
 
 # 过滤
 from rest_framework import filters
@@ -57,9 +57,9 @@ class CategoryPagination(PageNumberPagination):
     max_page_size = 100
 
 
-
-class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
-                    viewsets.GenericViewSet):
+class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+                      mixins.UpdateModelMixin,
+                      viewsets.GenericViewSet):
     """
     列出所有的主题或者创建一个新的主题。
     """
@@ -67,8 +67,17 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.C
     serializer_class = CategorySerializer
     pagination_class = CategoryPagination
 
-
-    filter_backends = ( DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ('inHead',)
     search_fields = ('name',)
     ordering_fields = ('order',)
+
+    def get_serializer_class(self):
+        '''
+        定义序列化类
+        :return:
+        '''
+        cient_type = self.request.META.get('HTTP_CLIENTTYPE', '')
+        if cient_type.upper() == 'APP' or self.request.query_params.get('CLIENTTYPE', '').upper() == 'APP':
+            return CategoryAppSerializer
+        return CategorySerializer

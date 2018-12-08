@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import sys
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,30 +42,32 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'corsheaders', # 跨域配置
+    'corsheaders',  # 跨域配置
 
     'category',
     'subject',
     'line',
     'video',
+    'spider',
     'front',
 
     'api',
 
-    'django_filters', # django_filters
-    'crispy_forms', # django-crispy-forms
-    'rest_framework', # django-rest-framework
+    'django_filters',  # django_filters
+    'crispy_forms',  # django-crispy-forms
+    'rest_framework',  # django-rest-framework
 
+    # 'debug_toolbar.apps.DebugToolbarConfig',
 ]
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',    # 跨域配置
+    'corsheaders.middleware.CorsMiddleware',  # 跨域配置
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'videsite.urls'
@@ -132,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'zh-CN'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -141,6 +144,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# 日期格式化模板
+DATETIME_FORMAT = '%Y-%m-%d %H:%M'  #:%S
+DATE_FORMAT = '%Y-%m-%d'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -153,22 +160,27 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'apps/iview/static'),
 )
 
-
-
 # REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 CRISPY_TEMPLATE_PACK = 'uni_form'
 
-
 # ------------------ 跨域配置 ------------------
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'zfdev.com',
     '192.168.0.88:8080',
+    '192.168.0.88:8081',
+    '127.0.0.1:8081',
     '127.0.0.1:8080',
     '127.0.0.1:8000',
 )
@@ -183,4 +195,48 @@ CORS_ALLOW_HEADERS = (
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    'clienttype',
 )
+
+# JWT
+JWT_AUTH = {
+    # Token失效时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    # Token前缀
+    'JWT_AUTH_HEADER_PREFIX': 'ZFDev'
+}
+
+# Debug_Toolbar
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# INSTALLED_APPS = INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
+# 中间件
+# MIDDLEWARE = MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+# 调试IP
+INTERNAL_IPS = ("127.0.0.1",)
+# debug_toolbar 组件选项
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+ENABLE_DEBUG_TOOLBAR = False
+if ENABLE_DEBUG_TOOLBAR:
+    # django debug toolbar
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    DEBUG_TOOLBAR_CONFIG = {
+        'JQUERY_URL': '//cdn.bootcss.com/jquery/2.1.4/jquery.min.js',
+        # 或把jquery下载到本地然后取消下面这句的注释, 并把上面那句删除或注释掉
+        # 'JQUERY_URL': '/static/jquery/2.1.4/jquery.min.js',
+        'SHOW_COLLAPSED': True,
+        'SHOW_TOOLBAR_CALLBACK': lambda x: True,
+    }

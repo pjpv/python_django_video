@@ -3,13 +3,14 @@
         <Card style="width:100%;min-height:50px;" dis-hover>
             <play-list :currentVideo="currentVideo" v-for="line in lines" v-if="line.list.length > 0" :key="line.id"
                        :line="line" :videos="line.list"></play-list>
-        <Spin size="large" fix v-if="spinShow"></Spin>
+            <Spin size="large" fix v-if="spinShow"></Spin>
         </Card>
     </div>
 </template>
 <script>
     import PlayList from './PlayList'
     export default {
+        name: 'lines',
         data(){
             return {
                 lines: [],
@@ -34,12 +35,16 @@
             }
         },
         mounted(){
-
+            console.log('lines', this.subject);
+        },
+        created(){
+            if (this.subject)
+                this.getList(this.subject);
         },
         watch: {
             'subject' (to, from) {
                 if (this.subject)
-                    this.getList(this.subject.id);
+                    this.getList(this.subject);
             }
         },
     }

@@ -11,7 +11,7 @@ from rest_framework.generics import GenericAPIView, mixins
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from subject.serializers import SubjectSerializer
+from subject.serializers import SubjectSerializer, SubjectAppSerializer
 from rest_framework.pagination import PageNumberPagination
 
 # 过滤
@@ -68,6 +68,28 @@ class SubjectViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Cr
     pagination_class = SubjectPagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ('category', 'state', 'pub_date', 'area', 'director', 'actress')
-    search_fields = ('name', 'tags')
+    filter_fields = ('category', 'state', 'pub_date', 'area')
+    search_fields = ('name', 'tags', 'director', 'actress')
     ordering_fields = ('pub_date', 'update_time')
+
+    def get_serializer_class(self):
+        '''
+        定义序列号类
+        :return:
+        '''
+        # if self.action == "list":
+        #     return APUserListSerizlizer
+        # elif self.action == "create":
+        #     return APUserBindSerizlizer
+        # date_type = self.request.query_params.get('type', None)
+        cient_type = self.request.META.get('HTTP_CLIENTTYPE', None)
+        if cient_type and cient_type.upper() == 'APP' or self.request.query_params.get('CLIENTTYPE',
+                                                                                       '').upper() == 'APP':
+            return SubjectAppSerializer
+        return SubjectSerializer
+
+    def perform_create(self, serializer):
+        subject = serializer.save()
+        if subject:
+            newline = lineModel.objects.create(name='在线播放',subject=subject)
+            newline.save()

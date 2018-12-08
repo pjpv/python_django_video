@@ -1,7 +1,7 @@
 <template>
-    <div class="category">
+
+    <div class="category" v-if="list.results">
         <!--{{ category.name }} - {{ list.count }}-->
-        <keep-alive>
         <Row style="" class="category-list">
             <Col :xs="12" :sm="6" :md="4" :lg="3" v-for="subject in list.results" :key="subject.id"
                  class="subject">
@@ -9,20 +9,23 @@
             </Col>
             <Spin size="large" fix v-if="spinShow"></Spin>
         </Row>
-                    </keep-alive>
 
         <Page :total="list.count" @on-change="changePage" v-bind:current="page" simple/>
     </div>
+    <loadingCard v-else></loadingCard>
+
 </template>
 
 <script>
     //    import {getCategory, getSubjects} from '../api/api'
     import SubjectCover from '../components/SubjectCover'
+    import loadingCard from '../components/loadingCard.vue'
 
     export default {
         name: 'category',
         components: {
-            SubjectCover
+            SubjectCover,
+            loadingCard,
         },
         data() {
             return {
@@ -101,8 +104,8 @@
 
         created(a, b){
             console.log('category created init');
-            console.log(this.$router);
-            console.log(this.$router.query, this.$route.query);
+            console.log(this.$route.query);
+//            if (!this.$route.query.page || !this.list.results)
                 this.init();
 
         },
@@ -112,7 +115,10 @@
         watch: {
             '$route' (to, from) {
                 console.log('category watch init', to, from);
-                this.init();
+//                if (!to.query.page)
+//                    this.init();
+                if (to.name === 'category' && to.params.id != from.params.id)
+                    this.init();
             }
         }
     }

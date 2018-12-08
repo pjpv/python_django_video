@@ -1,4 +1,4 @@
-import iView from 'iview';
+import {LoadingBar, Message} from 'iview';
 
 import axios from 'axios';
 import config from './config';
@@ -10,31 +10,51 @@ import router from '../router'
 // 使用vuex做全局loading时使用
 // import store from '@/store'
 
-let $m = function () {
-};
-function loadingStart(showMessage) {
-    iView.LoadingBar.start();
-    if (showMessage) {
-        $m();
-        $m = iView.Message.loading({
-            content: 'Loading...',
-            duration: 0
-        });
-    }
-}
-function loadingError(showMessage) {
-    iView.LoadingBar.error();
-    if (showMessage) {
-        $m();
-        $m = iView.Message.error({content: '加载失败', duration: 3});
-    }
-}
-function loadingFinish() {
-    iView.LoadingBar.finish();
-    // $m();
-    // $m = iView.Message.success({content: '加载完成', duration: 0});
+LoadingBar.config({
+    color: '#f8f8f9',
+    failedColor: '#f00000',
+    height: 2
+});
 
-}
+const loadingBar = {
+    isinit: false,
+    $m: function () {
+    },
+    _init: function () {
+        LoadingBar.config({
+            color: '#b1e0ee',
+            failedColor: '#f00000',
+            height: 2
+        });
+        this.isinit = true;
+    },
+    start: function (showMessage) {
+        if (!this.isinit) this._init();
+        LoadingBar.start();
+        if (showMessage) {
+            this.$m();
+            this.$m = Message.loading({
+                content: 'Loading...',
+                duration: 0
+            });
+        }
+    },
+    error: function (showMessage) {
+        if (!this.isinit) this._init();
+        LoadingBar.error();
+        if (showMessage) {
+            this.$m();
+            this.$m = Message.error({content: '加载失败', duration: 3});
+        }
+    },
+    finish: function () {
+        if (!this.isinit) this._init();
+        LoadingBar.finish();
+        // $m();
+        // $m = iView.Message.success({content: '加载完成', duration: 0});
+
+    }
+};
 
 
 export default function $axios(options) {
@@ -50,7 +70,10 @@ export default function $axios(options) {
         instance.interceptors.request.use(
             config => {
                 console.log('instance.interceptors.request', this);
-                loadingStart(options.showMessage);
+                loadingBar.start(options.showMessage);
+                config.headers.clienttype = 'app';
+                // config.headers['Via'] = 'app';
+                // config.headers.Authorization = 'ZFDev eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImdhcGVuIiwiZXhwIjoxNTQ0NDQ5OTI2LCJlbWFpbCI6ImdyZWVuZGV2QDE2My5jb20ifQ.xS5gF_BaMVaHcNr9InK7I10r9anY_JcaThl4-lAC-8s'
                 // let token = Cookies.get('markToken')
                 // // 1. 请求开始的时候可以结合 vuex 开启全屏 loading 动画
                 // // console.log(store.state.loading)
@@ -94,7 +117,7 @@ export default function $axios(options) {
                         path: `/error/${errorStatus}`
                     })
                 }
-                loadingError(options.showMessage);
+                loadingBar.error(options.showMessage);
                 return Promise.reject(error) // 在调用的那边可以拿到(catch)你想返回的错误信息
             }
         )
@@ -126,7 +149,7 @@ export default function $axios(options) {
                 // err.response = response
                 // throw err
 
-                loadingFinish(options.showMessage);
+                loadingBar.finish(options.showMessage);
                 return data
             },
             err => {
@@ -180,7 +203,7 @@ export default function $axios(options) {
                     }
                 }
 
-                loadingError(options.showMessage);
+                loadingBar.error(options.showMessage);
                 console.error(err)
                 return Promise.reject(err) // 返回接口返回的错误信息
             }

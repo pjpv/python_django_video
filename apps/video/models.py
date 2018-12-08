@@ -13,13 +13,16 @@ class videoModel(models.Model):
         (0, 'DPlayer'),
         (1, 'ckPlayer'),
         (2, 'iframe'),
+        (3, '站外链接'),
     )
     player = models.IntegerField(choices=PLAYER_CHOICES, verbose_name='播放器', help_text='播放器', default=0)
     live = models.BooleanField(verbose_name='直播', help_text='直播', default=False)
     add_time = models.DateTimeField(verbose_name='添加时间', help_text='添加时间', auto_now_add=True)
+    order = models.IntegerField(default=999, verbose_name='排序', help_text='排序')
 
     class Meta:
         verbose_name_plural = verbose_name = '视频'
 
     def __str__(self):
-        return '{subject}-{line}-{name}'.format(subject=self.line.subject.name, line=self.line.name, name=self.name)
+        # return '{subject}-{line}-{name}'.format(subject=self.line.subject.name, line=self.line.name, name=self.name)
+        return self.name

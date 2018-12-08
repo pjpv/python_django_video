@@ -109,24 +109,33 @@
 <template>
     <div class="layout">
         <Layout>
-            <Sider class="left-sider" breakpoint="md" collapsible :default-collapsed="true" :collapsed-width="0"
-                   v-model="isCollapsed">
-                <TopSider></TopSider>
-                <div slot="trigger"></div>
-            </Sider>
+            <keep-alive>
+                <Sider class="left-sider" breakpoint="md" collapsible :default-collapsed="true" :collapsed-width="0"
+                       v-model="isCollapsed">
+                    <TopSider></TopSider>
+                    <div slot="trigger"></div>
+                </Sider>
+            </keep-alive>
             <Layout>
                 <Header>
-                    <TopMenu></TopMenu>
+
+                    <keep-alive>
+                        <TopMenu></TopMenu>
+                    </keep-alive>
                 </Header>
                 <Content class="content">
 
                     <TopBreadcrumb></TopBreadcrumb>
 
                     <Card class="content-card">
-                        <router-view></router-view>
-
+                        <keep-alive include="category">
+                            <router-view></router-view>
+                        </keep-alive>
                     </Card>
-                    <MyFooter></MyFooter>
+
+                    <keep-alive>
+                        <MyFooter></MyFooter>
+                    </keep-alive>
                 </Content>
 
             </Layout>
@@ -148,7 +157,13 @@
             }
         },
         mounted () {
-
+        },
+        created(){
+            this.$Loading.config({
+                color: '#5cb85c',
+                failedColor: '#f0ad4e',
+                height: 5
+            });
         },
         beforeDestroy () {
 
