@@ -27,9 +27,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'mdb-!42-*r5=3@7dd64%4(pse=lg^1la4iyp#!62zl0szr^8(7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.0.88']
+
 
 # Application definition
 
@@ -77,7 +76,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            # os.path.join(BASE_DIR, 'apps/vuefront/'),
+            os.path.join(BASE_DIR, 'apps/iview-admin/dist/'),
             os.path.join(BASE_DIR, 'apps/iview/'),
         ],
         'APP_DIRS': True,
@@ -156,7 +155,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'apps/front/static/'),
-    os.path.join(BASE_DIR, 'apps/vuefront/dist/static'),
+    os.path.join(BASE_DIR, 'apps/iview-admin/dist/static'),
     os.path.join(BASE_DIR, 'apps/iview/static'),
 )
 
@@ -174,30 +173,6 @@ REST_FRAMEWORK = {
 
 CRISPY_TEMPLATE_PACK = 'uni_form'
 
-# ------------------ 跨域配置 ------------------
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'zfdev.com',
-    '192.168.0.88:8080',
-    '192.168.0.88:8081',
-    '127.0.0.1:8081',
-    '127.0.0.1:8080',
-    '127.0.0.1:8000',
-)
-# CORS_URLS_REGEX = r'^/api/.*$'
-CORS_ALLOW_HEADERS = (
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'clienttype',
-)
-
 # JWT
 JWT_AUTH = {
     # Token失效时间
@@ -207,29 +182,32 @@ JWT_AUTH = {
 }
 
 # Debug_Toolbar
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
-# INSTALLED_APPS = INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
-# 中间件
-# MIDDLEWARE = MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-# 调试IP
-INTERNAL_IPS = ("127.0.0.1",)
-# debug_toolbar 组件选项
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.cache.CachePanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-    'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+
 ENABLE_DEBUG_TOOLBAR = False
 if ENABLE_DEBUG_TOOLBAR:
+
+    DEBUG_TOOLBAR_PATCH_SETTINGS = False
+    # INSTALLED_APPS = INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
+    # 中间件
+    # MIDDLEWARE = MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    # 调试IP
+    INTERNAL_IPS = ("127.0.0.1",)
+    # debug_toolbar 组件选项
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
+
     # django debug toolbar
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
@@ -240,3 +218,9 @@ if ENABLE_DEBUG_TOOLBAR:
         'SHOW_COLLAPSED': True,
         'SHOW_TOOLBAR_CALLBACK': lambda x: True,
     }
+
+# 载入不同的配置
+if os.environ.get('DJANGO_PRODUCTION_SETTINGS', None):
+    from .pro_settings import *
+else:
+    from .dev_settings import *

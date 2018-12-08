@@ -28,7 +28,7 @@ module.exports = {
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   // 如果你不需要使用eslint，把lintOnSave设为false即可
-  lintOnSave: true,
+  lintOnSave: false,
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
@@ -41,5 +41,8 @@ module.exports = {
     host: '127.0.0.1',
     port: 8081,
     // proxy: 'localhost:8081'
-  }
+  },
+  // outputDir: 'static',
+  assetsDir: 'static',
+  indexPath: 'iadmin.html',
 }

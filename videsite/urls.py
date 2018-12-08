@@ -45,9 +45,10 @@ urlpatterns = [
     url('o/', include('front.urls'), name='front'),
 
     # vue 前端
+    url('iadmin/', TemplateView.as_view(template_name='iadmin.html')),
+    # vue 前端
     url('', TemplateView.as_view(template_name='index_prod.html')),
 ]
-
 
 if settings.ENABLE_DEBUG_TOOLBAR:
     # static and media

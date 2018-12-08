@@ -106,7 +106,7 @@ export const saveLine = (data) => {
 /* 删除播放列表 */
 export const delLine = (lineId) => {
   return axios.request({
-    url: `/lines/${lineId}`,
+    url: `/lines/${lineId}/`,
     method: 'delete'
   })
 };
@@ -156,7 +156,7 @@ export const saveVideo = (data) => {
 /* 删除视频信息 */
 export const delVideo = (videoId) => {
   return axios.request({
-    url: `/videos/${videoId}`,
+    url: `/videos/${videoId}/`,
     method: 'delete'
   })
 };
@@ -196,7 +196,7 @@ export const getSpider = (id) => {
 /* 删除爬虫信息 */
 export const delSpider = (id) => {
   return axios.request({
-    url: `/spiders/${id}`,
+    url: `/spiders/${id}/`,
     method: 'delete'
   })
 };
