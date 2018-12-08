@@ -43,6 +43,6 @@ module.exports = {
     // proxy: 'localhost:8081'
   },
   // outputDir: 'static',
-  assetsDir: 'static',
+  assetsDir: 'static/iadmin',
   indexPath: 'iadmin.html',
 }
