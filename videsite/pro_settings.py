@@ -16,7 +16,7 @@ import datetime
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['v.zfdev.com', '47.98.168.135']
+ALLOWED_HOSTS = ['movie.zfdev.com', 'tv.zfdev.com']
 
 DATABASES = {
     'default': {
