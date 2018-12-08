@@ -10,7 +10,8 @@
         <div class="sortBox" style="float:right;line-height:30px;">
           <!--<Button icon="ios-add-circle-outline" v-if="!srotSwitch" @click="addVideo">添加视频</Button>-->
           <Button size="small" icon="ios-add-circle-outline" v-if="!srotSwitch" @click="addVideoList">添加列表</Button>
-          <Button size="small" type="primary" icon="ios-cloud-upload-outline" v-if="srotSwitch" @click="saveSort">保存</Button>
+          <Button size="small" type="primary" icon="ios-cloud-upload-outline" v-if="srotSwitch" @click="saveSort">保存
+          </Button>
           排序：
           <i-switch v-model="srotSwitch" @on-change="trigger"/>
         </div>
@@ -67,6 +68,12 @@
             <Option v-bind:value="1">ckPlayer</Option>
             <Option v-bind:value="2">iframe</Option>
             <Option v-bind:value="3">站外链接</Option>
+            <Option v-bind:value="4">视频解析</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="解析API">
+          <Select v-model="formData.video_parse">
+            <Option v-model="p.id" v-for="p in videoParses">{{ p.parse_link }}</Option>
           </Select>
         </FormItem>
         <FormItem label="添加时间">
@@ -106,7 +113,17 @@
 
 
   import lineList from './line'
-  import {getlines, setlinesSort, setVideoSort, getVideo, saveVideo, delVideo, saveLine, delLine} from '@/api/data'
+  import {
+    getlines,
+    setlinesSort,
+    setVideoSort,
+    getVideo,
+    saveVideo,
+    delVideo,
+    saveLine,
+    delLine,
+    getVideoParses
+  } from '@/api/data'
 
   export default {
     name: 'lines',
@@ -151,6 +168,9 @@
 
         // 添加播放列表
         addlineName: '',
+
+        // 视频解析接口
+        videoParses: [],
       };
     },
     computed: {
@@ -182,6 +202,7 @@
             resolve()
           }, res => {
             console.log('载入播放线路失败');
+            reject();
           })
 //          .then(() => {
 //          console.log('载入播放线路完成');
@@ -194,6 +215,21 @@
           this.hackReset = true;
           this.loading = false;
         });
+      },
+      initVideoParses(){
+
+        let that = this;
+        return new Promise(function (resolve, reject) {
+          getVideoParses().then(res => {
+            that.videoParses = res.data.results;
+            console.log('载入视频解析接口成功');
+            resolve()
+          }, res => {
+            console.log('载入视频解析接口失败');
+            reject();
+          })
+        });
+
       },
       sortEnd(e){
         console.log(e.event, e.newIndex, e.oldIndex, e.collection);
@@ -510,7 +546,7 @@
     mounted()
     {
       console.log('lines created', this.subjectId);
-      this.initData();
+      this.initData().then(this.initVideoParses);
     }
   }
   ;

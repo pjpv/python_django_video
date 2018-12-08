@@ -164,7 +164,7 @@ export const delVideo = (videoId) => {
 
 /*—————— 爬虫 ——————*/
 
-/* 修改视频信息 */
+/* 修改爬虫信息 */
 export const saveSpider = (data) => {
   let url = '/spiders/';
   let method = 'post';
@@ -207,5 +207,29 @@ export const setSpiderSort = (data) => {
     url: `/spiders/sort/`,
     data: data,
     method: 'patch'
+  })
+};
+
+/*—————— 视频解析 ——————*/
+
+/* 修改解析信息 */
+export const saveVideoParse = (data) => {
+  let url = '/parses/';
+  let method = 'post';
+  if (data.id) {
+    url = `/spiders/${data.id}/?type=2`;
+    method = `patch`;
+  }
+  return axios.request({
+    url: url,
+    data: data,
+    method: method
+  })
+};
+
+/* 获取所有解析接口 */
+export const getVideoParses =() => {
+  return axios.request({
+    url: `/parses/`,
   })
 };

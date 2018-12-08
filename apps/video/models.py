@@ -14,8 +14,11 @@ class videoModel(models.Model):
         (1, 'ckPlayer'),
         (2, 'iframe'),
         (3, '站外链接'),
+        (4, 'VIP解析'),
     )
     player = models.IntegerField(choices=PLAYER_CHOICES, verbose_name='播放器', help_text='播放器', default=0)
+    video_parse = models.ForeignKey('videoparse.videoParseModel', verbose_name='视频解析API',
+                                    on_delete=models.SET_NULL, null=True, default=None)
     live = models.BooleanField(verbose_name='直播', help_text='直播', default=False)
     add_time = models.DateTimeField(verbose_name='添加时间', help_text='添加时间', auto_now_add=True)
     order = models.IntegerField(default=999, verbose_name='排序', help_text='排序')

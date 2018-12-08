@@ -37,8 +37,8 @@ Vue.use(api);
 Vue.use(VueLazyload, {
     preLoad: 1.3,
     // loading: 'dist/loading.gif',
-    error: 'https://ws1.sinaimg.cn/small/6260f60dly1fxslxnwva9j206d07y0sy.jpg',
-    loading: 'https://ws1.sinaimg.cn/large/6260f60dly1fxt87tx6fug20jo0k0tbx.gif',
+    error: '//ws1.sinaimg.cn/small/6260f60dly1fxslxnwva9j206d07y0sy.jpg',
+    loading: '//ws1.sinaimg.cn/large/6260f60dly1fxt87tx6fug20jo0k0tbx.gif',
     attempt: 1
 });
 

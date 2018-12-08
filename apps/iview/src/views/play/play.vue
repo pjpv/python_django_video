@@ -5,7 +5,7 @@
             <div v-if="!resetPlayer">
                 <dplayer v-if="video.player === 0" :video="video"></dplayer>
                 <ckplayer v-else-if="video.player === 1" :video="video"></ckplayer>
-                <Viframe v-else-if="video.player === 2" :video="video"></Viframe>
+                <Viframe v-else-if="video.player === 2 || video.player === 4" :video="video"></Viframe>
                 <div v-else-if="video.player === 3"
                      style="text-align: center;vertical-align: middle;">
                     <Card>

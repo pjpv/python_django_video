@@ -6,10 +6,10 @@
     #player {
         width: 100%;
         height: 550px;
-        background-image: url(https://ws1.sinaimg.cn/large/6260f60dly1fxt87tx6fug20jo0k0tbx.gif);
+        background-image: url(//ws1.sinaimg.cn/large/6260f60dly1fxt87tx6fug20jo0k0tbx.gif);
         background-position: top;
         background-repeat: no-repeat;
-        background-size: auto;
+        background-size: contain;
     }
 
     @media screen and (min-width: 1201px) {
@@ -56,7 +56,7 @@
 <template>
     <div class="player">
         <div id="player" v-if="video">
-            <iframe name="ifm" class="fan mdui-container" :src="video.link" style="height: 100%;width: 100%;"
+            <iframe name="ifm" class="fan mdui-container" :src="link" style="height: 100%;width: 100%;"
                     frameborder="no" scrolling="no" allowfullscreen="true" marginwidth="0" marginheight="0" vspace="0"
                     hspace="0" align="middle">
             </iframe>
@@ -69,6 +69,15 @@
         props: ['video'],
         data(){
             return {}
+        },
+        computed: {
+            link(){
+                let l = this.video.link;
+                if(this.video.player === 4){
+                    l = this.video.video_parse_link + l;
+                }
+                return l;
+            }
         },
         components: {},
         methods: {},

@@ -12,14 +12,26 @@ from video.models import videoModel
 from line.serializers import LineAppSerializer
 from line.models import lineModel
 
+from videoparse.models import videoParseModel
+
 class VideoAppSerializer(serializers.ModelSerializer):
     # line = LineSerializer()
     line = serializers.SerializerMethodField()
+    video_parse_link = serializers.SerializerMethodField()
 
     def get_line(self,obj):
         l = lineModel.objects.get(id=obj.line.id)
         serlalizers =  LineAppSerializer(l, many=False)
         return serlalizers.data
+
+
+    def get_video_parse_link(self, obj):
+        try:
+            p = videoParseModel.objects.get(id=obj.video_parse_id)
+            return p.parse_link
+        except Exception as e:
+            print(e)
+            return ''
 
     class Meta:
         model = videoModel

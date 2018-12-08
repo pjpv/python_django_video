@@ -49,20 +49,20 @@
                 if (this.player) {
                     /* 切换视频源 */
                     this.player.switchVideo({
-                        url: this.video.link,
+                        url: this.video.link.replace('http://','//'),
 //                        pic: 'second.png',
 //                        thumbnails: 'second.jpg'
                     });
                     /* 销毁 */
 //                    this.player.destroy();
                 } else {
-                    console.log('link', this.video.link);
+                    console.log('link', this.video.link.replace('http://','//'));
                     this.player = new DPlayer({
                         container: this.$refs.dplayer,
 //                screenshot: false,
 //                logo: 'image/logo4.png',
                         video: {
-                            url: this.video.link,
+                            url: this.video.link.replace('http://','//'),
                         },
 //                contextmenu: [
 //                ],

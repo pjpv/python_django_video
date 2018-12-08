@@ -22,6 +22,7 @@ from line.views import LineViewSet
 from video.views import VideoViewSet
 from category.views import CategoryViewSet
 from spider.views import SpiderViewSet
+from videoparse.views import VideoParseViewSet
 
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
@@ -31,6 +32,7 @@ router.register(r'subjects', SubjectViewSet, base_name="subjects")
 router.register(r'lines', LineViewSet, base_name="lines")
 router.register(r'videos', VideoViewSet, base_name="videos")
 router.register(r'spiders', SpiderViewSet, base_name="spiders")
+router.register(r'parses', VideoParseViewSet, base_name="parses")
 urlpatterns = router.urls
 
 # urlpatterns = [

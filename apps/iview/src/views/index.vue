@@ -33,7 +33,8 @@
                     <Icon type="md-more"/>
                     更多
                 </router-link>
-                <Row style="">
+
+                <Row style="" v-if="category.list.length" >
                     <Col :xs="12" :sm="6" :md="5" :lg="4" v-for="subject in category.list" :key="subject.id"
                          class="subject">
                     <!--<router-link :to="{ name: 'subject', params: {cid: category.id, id: subject.id} }" :title="subject.name">-->
@@ -47,6 +48,7 @@
                     <subject-cover :subject="subject" :category="category"></subject-cover>
                     </Col>
                 </Row>
+                <loadingCard v-else></loadingCard>
             </Card>
             </Col>
         </Row>

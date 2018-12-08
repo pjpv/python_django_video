@@ -2,13 +2,16 @@
 
     <div class="category" v-if="list.results">
         <!--{{ category.name }} - {{ list.count }}-->
-        <Row style="" class="category-list">
+        <Row style="" class="category-list" v-if="list.results.length">
             <Col :xs="12" :sm="6" :md="4" :lg="3" v-for="subject in list.results" :key="subject.id"
                  class="subject">
             <subject-cover :subject="subject" :category="category"></subject-cover>
             </Col>
             <Spin size="large" fix v-if="spinShow"></Spin>
         </Row>
+        <p v-else style="text-align: center;height: 100px;vertical-align: middle;line-height: 100px;">
+            此分类暂无相关的影片
+        </p>
 
         <Page :total="list.count" @on-change="changePage" v-bind:current="page" simple/>
     </div>

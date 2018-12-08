@@ -6,9 +6,10 @@
     #player {
         width: 100%;
         height: 550px;
-        background-image: url(https://ws1.sinaimg.cn/large/6260f60dly1fxt87tx6fug20jo0k0tbx.gif);
+        background-image: url(//ws1.sinaimg.cn/large/6260f60dly1fxt87tx6fug20jo0k0tbx.gif);
         background-position: center;
         background-repeat: no-repeat;
+        background-size: cover;
 
     }
 
@@ -54,7 +55,7 @@
     </div>
 </template>
 <script>
-    import '../../static/js/ckplayer/hls/hls'
+//    import '../../static/js/ckplayer/hls/hls'
     import '../../static/js/ckplayer/ckplayer'
 
 

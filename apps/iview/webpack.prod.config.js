@@ -14,17 +14,17 @@ fs.open('./src/config/env.js', 'w', function (err, fd) {
 module.exports = merge(webpackBaseConfig, {
     output: {
         publicPath: '/static/',
-        filename: '[name].[hash].js',
-        chunkFilename: '[name].[hash].chunk.js'
+        filename: 'js/[name].[hash].js',
+        chunkFilename: 'js/[name].[hash].chunk.js'
     },
     plugins: [
         new ExtractTextPlugin({
-            filename: '[name].[hash].css',
+            filename: 'css/[name].[hash].css',
             allChunks: true
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendors',
-            filename: 'vendors.[hash].js'
+            filename: 'js/vendors.[hash].js'
         }),
         new webpack.DefinePlugin({
             'process.env': {

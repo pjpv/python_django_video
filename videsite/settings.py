@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'corsheaders',  # 跨域配置
 
+    'videoparse',
     'category',
     'subject',
     'line',
