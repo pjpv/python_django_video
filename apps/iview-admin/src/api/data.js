@@ -40,9 +40,32 @@ export const uploadImg = formData => {
 
 /*—————— 分类 ——————*/
 /* 获取所有分类 */
-export const getCategorys = formData => {
+export const getCategorys = (searchValue, page) => {
+  searchValue = searchValue ? searchValue : '';
+  page = page ? page : 1;
   return axios.request({
-    url: '/categorys/',
+    url: `/categorys/?search=${searchValue}&page=${page}`,
+  })
+};
+/* 修改分类 */
+export const saveCategory = (data, portion) => {
+  let url = '/categorys/';
+  let method = 'post';
+  if (data.id) {
+    url = `/categorys/${data.id}/`;
+    method = portion ? 'patch' : `put`;
+  }
+  return axios.request({
+    url: url,
+    data: data,
+    method: method
+  })
+};
+
+/* 获取某个分类 */
+export const getCategory = (id) => {
+  return axios.request({
+    url: `/categorys/${id}/`,
   })
 };
 
@@ -180,9 +203,10 @@ export const saveSpider = (data) => {
 };
 
 /* 获取主题的所有爬虫 */
-export const getSpiders = (sid, type) => {
+export const getSpiders = (id, type, searchValue) => {
+  searchValue = searchValue ? searchValue : '';
   return axios.request({
-    url: `/spiders/?owner=${sid}&spider_type=${type}&ordering=order,id`,
+    url: `/spiders/?owner=${id}&spider_type=${type}&search=${searchValue}&ordering=order,id`,
   })
 };
 
@@ -228,7 +252,7 @@ export const saveVideoParse = (data) => {
 };
 
 /* 获取所有解析接口 */
-export const getVideoParses =() => {
+export const getVideoParses = () => {
   return axios.request({
     url: `/parses/`,
   })

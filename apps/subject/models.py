@@ -24,6 +24,7 @@ class subjectModel(models.Model):
     tags = models.CharField(max_length=250, verbose_name='标签', help_text='标签', default='无')
     desc = models.CharField(max_length=500, verbose_name='描述', help_text='描述', default='无')
     tips = models.CharField(max_length=30, verbose_name='提示', help_text='提示', default='')
+    douban_id = models.BigIntegerField(verbose_name='豆瓣ID', help_text='豆瓣ID', default=0)
 
     class Meta:
         verbose_name_plural = verbose_name = '主题'

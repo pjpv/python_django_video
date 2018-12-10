@@ -9,7 +9,8 @@
         </p>
         <div class="sortBox" style="float:right;line-height:30px;">
           <Button size="small" icon="ios-add-circle-outline" v-if="!srotSwitch" @click="addSpider">添加爬虫</Button>
-          <Button size="small" type="primary" icon="ios-cloud-upload-outline" v-if="srotSwitch" @click="saveSort">保存</Button>
+          <Button size="small" type="primary" icon="ios-cloud-upload-outline" v-if="srotSwitch" @click="saveSort">保存
+          </Button>
           排序：
           <i-switch v-model="srotSwitch"/>
         </div>
@@ -86,15 +87,15 @@
   import {ContainerMixin, ElementMixin} from 'vue-slicksort';
   import {HandleDirective} from 'vue-slicksort';
   //  import {SlickList, SlickItem} from 'vue-slicksort';
-  import SortableItem from '../lines/SortableItem.vue'
-  import SortableList from '../lines/SortableList.vue'
+  import SortableItem from '_v/data/subject/lines/SortableItem.vue'
+  import SortableList from '_v/data/subject/lines/SortableList.vue'
 
 
   import {getSpiders, saveSpider, getSpider, delSpider, setSpiderSort} from '@/api/data'
 
   export default {
     name: 'spider',
-    props: ['subjectId'],
+    props: ['ownerId', 'spiderType'],
     directives: {handle: HandleDirective},
     data() {
       return {
@@ -112,7 +113,7 @@
           id: '', // id
           name: '', // 名称
           order: 999, // 播放器
-          spider_type: 1, // 爬虫类型
+          spider_type: '', // 爬虫类型
           owner: '', // 拥有者ID
           link: '', // 爬取URL
           project: '', // 项目名称
@@ -134,7 +135,7 @@
         let that = this;
         that.loading = false;
         return new Promise(function (resolve, reject) {
-          getSpiders(that.subjectId, 1).then(res => {
+          getSpiders(that.ownerId, that.spiderType).then(res => {
             that.spiders = res.data.results;
             console.log('载入爬虫成功');
             that.loading = false;
@@ -162,7 +163,7 @@
           if (that.changeListIndex) {
             console.log('修改了列表排序, 新顺序：', that.newSpiders.map(l => l.id))
             let data = {
-              sid: that.subjectId,
+              sid: that.ownerId,
               indexs: that.newSpiders.map(l => l.id),
             };
             setSpiderSort(data).then(res => {
@@ -272,10 +273,10 @@
       addSpider(line){
 
         this.formData = {
-          name: '', // 名称
+          name: `${this.spiderType}_${this.ownerId}_`, // 名称
           order: 999, // 播放器
-          spider_type: 1, // 爬虫类型
-          owner: this.subjectId, // 拥有者ID
+          spider_type: this.spiderType, // 爬虫类型
+          owner: this.ownerId, // 拥有者ID
           link: '', // 爬取URL
           project: '', // 项目名称
           enable: true, // 是否启用
@@ -295,7 +296,7 @@
     ,
     mounted()
     {
-      console.log('spider created', this.subjectId);
+      console.log('spider created', this.ownerId);
       this.initData();
     }
   }

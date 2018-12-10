@@ -70,14 +70,84 @@
       <Card>
         <p slot="title">
           <Icon type="paper-airplane"></Icon>
-          导入
+          豆瓣导入
         </p>
-        豆瓣导入：
-
+        <p>
+          导入：
+        </p>
         <Input placeholder="https://movie.douban.com/subject/12345678/" v-model="doubanURL">
         <Button slot="append" class="doubanImportBtn" icon="ios-download-outline" @click="doubanImport"
                 shape="circle"></Button>
         </Input>
+        <Divider/>
+        <p>
+          搜索：
+        </p>
+        <!--<Input placeholder="影片名称" v-model="doubanName">-->
+        <!--<Button slot="append" class="doubanImportBtn" icon="ios-search" @click="doubanSearch"-->
+        <!--shape="circle"></Button>-->
+        <!--</Input>-->
+        <!--<AutoComplete-->
+        <!--v-model="doubanName"-->
+        <!--icon="ios-search"-->
+        <!--placeholder="影片名称"-->
+        <!--@on-change="doubanSearch"-->
+        <!--@on-select="doubanSelect"-->
+        <!--style="">-->
+        <!--<div class="demo-auto-complete-item">-->
+        <!--<div class="demo-auto-complete-group" style="min-height: 30px;">-->
+        <!--&lt;!&ndash;<span>{{ doubanName }}</span>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="https://www.google.com/search?q=iView" class="external-link" target="_blank" style="float: right;">更多</a>&ndash;&gt;-->
+        <!--</div>-->
+        <!--<Option v-for="item in doubanSearchData" :value="item.id" :key="item.id">-->
+        <!--<span class="douban-title">{{ item.title }}</span>-->
+        <!--<span class="douban-year">{{ item.year }} 年</span>-->
+        <!--</Option>-->
+        <!--</div>-->
+        <!--<a :href="'https://movie.douban.com/subject_search?cat=1002&search_text=' + doubanName" target="_blank"-->
+        <!--class="external-link"-->
+        <!--style="display: block;margin: 0 auto;padding: 4px;text-align: center;font-size: 12px;">查看所有结果</a>-->
+        <!--</AutoComplete>-->
+        <Poptip v-model="showDoubanSearchData" class="douban-search">
+
+          <Input placeholder="https://movie.douban.com/subject/12345678/" v-model="doubanName" search @on-search="doubanSearch">
+          <Button slot="append" class="doubanImportBtn" icon="ios-search" @click="doubanSearch"
+                  shape="circle"></Button>
+          </Input>
+          <div slot="title"><i>搜索结果</i></div>
+          <div slot="content">
+            <div id="search_suggest" style="/* display: none; */top: 78px;left: 593.906px;"
+                 v-if="doubanSearchData.length">
+              <ul>
+                <li :data-link="'https://movie.douban.com/subject/' + item.id + '/'" v-for="item in doubanSearchData"
+                    :value="item.id" :key="item.id">
+                  <a @click="doubanSelect(item.id)">
+                    <img :src="item.img" width="40">
+                    <p>
+                      <em>{{ item.title }}</em> <span>{{ item.year }}</span>
+                      <br>
+                      <span>{{ item.sub_title }}</span>
+                      <br>
+                      <span v-if="item.type == 'tv'">
+                        电视剧<span>共{{ item.episode }}集</span>
+                      </span>
+                      <span v-else-if="item.type == 'movie'">
+                        电影
+                      </span>
+                    </p>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div style="lf">
+
+            </div>
+            <a :href="'https://movie.douban.com/subject_search?cat=1002&search_text=' + doubanName" target="_blank"
+               class="external-link"
+               style="display: block;margin: 0 auto;padding: 4px;text-align: center;font-size: 12px;">查看所有结果</a>
+
+          </div>
+        </Poptip>
       </Card>
       <Card>
         <p slot="title">
@@ -142,7 +212,7 @@
 
 <script>
   import {getSubject, saveSubject, getCategorys} from '@/api/data'
-  import {getDoubanMovie} from '@/api/other'
+  import {getDoubanMovie, searchDoubanMovie, searchDoubanMovie2} from '@/api/other'
   import vTags from '../../components/tags'
 
 
@@ -234,6 +304,9 @@
 
         // 豆瓣URL
         doubanURL: '',
+        doubanName: '',
+        doubanSearchData: [],
+        showDoubanSearchData: false,
 
 
       };
@@ -392,63 +465,84 @@
           this.loading = false;
         })
       },
+      doubanImportData(id){
+        let that = this;
+
+        getDoubanMovie(id).then(res => {
+          console.log('获取豆瓣信息成功', res);
+
+
+          // 主演
+          that.actress = res.casts.map(i => i.name).join(',');
+          // 地区
+          that.area = res.countries.join(',');
+//        that.category =
+          // 封面
+          that.cover = res.images["large"];
+          // 简介
+          that.desc = res.summary;
+          // 导演
+          that.director = res.directors.map(i => i.name).join(',');
+          that.name = res.title;
+
+          let initPubdate = false;
+          if (res.pubdates) {
+            let reg = res.pubdates[0].match(/(\d{4}-\d{2}-\d{2})/);
+            if (reg) {
+
+              that.pub_date = new datetime(reg[1]);
+              that.pub_date_date = reg[1];
+              that.pub_date_time = '00:00:00';
+              initPubdate = true;
+            }
+          }
+          if (!initPubdate) {
+            that.pub_date = '';
+            that.pub_date_date = '';
+            that.pub_date_time = '';
+          }
+
+
+          that.state = 0;
+          that.tags = res.tags.join(',');
+          that.tags_list = res.tags;
+
+          that.tagsReset();
+        }, res => {
+          console.log('获取豆瓣信息失败', res);
+        }).then(() => {
+          console.log('获取豆瓣信息完成');
+
+        })
+      },
       doubanImport(){
         let that = this;
         let reg = this.doubanURL.match(/subject\/(\d+)\//);
         if (reg) {
           let id = reg[1];
-
-          getDoubanMovie(id).then(res => {
-            console.log('获取豆瓣信息成功', res);
-
-
-            // 主演
-            that.actress = res.casts.map(i => i.name).join(',');
-            // 地区
-            that.area = res.countries.join(',');
-//        that.category =
-            // 封面
-            that.cover = res.images["large"];
-            // 简介
-            that.desc = res.summary;
-            // 导演
-            that.director = res.directors.map(i => i.name).join(',');
-            that.name = res.title;
-
-            let initPubdate = false;
-            if (res.pubdates) {
-              let reg = res.pubdates[0].match(/(\d{4}-\d{2}-\d{2})/);
-              if (reg) {
-
-                that.pub_date = new datetime(reg[1]);
-                that.pub_date_date = reg[1];
-                that.pub_date_time = '00:00:00';
-                initPubdate = true;
-              }
-            }
-            if (!initPubdate) {
-              that.pub_date = '';
-              that.pub_date_date = '';
-              that.pub_date_time = '';
-            }
-
-
-            that.state = 0;
-            that.tags = res.tags.join(',');
-            that.tags_list = res.tags;
-
-            that.tagsReset();
-          }, res => {
-            console.log('获取豆瓣信息失败', res);
-          }).then(() => {
-            console.log('获取豆瓣信息完成');
-
-          })
-
+          that.doubanImportData(id);
 
         } else {
           this.$Message.error('豆瓣链接有误，');
         }
+      },
+      doubanSearch(e){
+        console.log(e);
+        if (this.doubanName.replace(/ /, '').length > 1)
+          searchDoubanMovie2(this.doubanName).then(res => {
+            console.log('获取豆瓣信息成功', res);
+            this.doubanSearchData = JSON.parse(res);
+          }, res => {
+            console.log('获取豆瓣信息失败', res);
+
+          }).then(() => {
+            console.log('获取豆瓣信息完成');
+            this.showDoubanSearchData = true;
+          });
+      },
+      doubanSelect(id){
+        console.log(id);
+        this.doubanImportData(id);
       },
       /* 初始化分类信息 */
       initCategorys(){
@@ -569,5 +663,96 @@
   .doubanImportBtn:focus {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;;
+  }
+
+  .external-link:after {
+    content: "\F3F2";
+    font-family: Ionicons;
+    color: #aaa;
+    margin-left: 3px;
+  }
+
+  .douban-title {
+    /*float: left;*/
+  }
+
+  .douban-year {
+    float: right;
+    color: #999;
+  }
+
+  .douban-images {
+    width: 50px;
+  }
+
+  /**/
+
+  #search_suggest {
+    /*background: #fff;*/
+    /*border: 1px solid #ddd;*/
+    /*position: absolute;*/
+    /*z-index: 99;*/
+    /*top: 32px;*/
+    /*width: 302px;*/
+    /*border-top: 0 none;*/
+  }
+
+  #search_suggest li {
+    /*border-bottom: 1px solid #eee;*/
+    overflow: hidden;
+  }
+
+  #search_suggest li:last-child {
+    border-bottom: 0 none;
+  }
+
+  #search_suggest li a {
+    color: #999;
+    display: block;
+    overflow: hidden;
+    padding: 6px;
+    zoom: 1;
+  }
+
+  #search_suggest li a:link, #search_suggest li a:visited {
+    text-decoration: none;
+  }
+
+  #search_suggest li a:hover {
+    background: #f9f9f9;
+    color: #999;
+  }
+
+  #search_suggest li a em {
+    font-style: normal;
+    color: #369;
+  }
+
+  #search_suggest li p {
+    margin: 0;
+    zoom: 1;
+    overflow: hidden;
+  }
+
+  #search_suggest li img {
+    float: left;
+    margin-right: 8px;
+    margin-top: 3px;
+  }
+
+  #search_suggest {
+    /*width: 468px;*/
+    /*margin-left: -5px;*/
+    /*margin-top: 2px;*/
+  }
+
+</style>
+<style>
+  .ivu-select-item {
+    line-height: 30px;
+  }
+
+  .douban-search, .douban-search > div {
+    width: 100%;
   }
 </style>

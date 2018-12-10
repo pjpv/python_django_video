@@ -25,3 +25,13 @@ axios.jsonp = (url) => {
 export const getDoubanMovie = id => {
   return axios.jsonp(`//api.douban.com/v2/movie/subject/${id}?apikey=0b2bdeda43b5688921839c8ecb20399b`)
 };
+
+/* 搜索所有分类 */
+export const searchDoubanMovie = text => {
+  return axios.jsonp(`//api.douban.com/v2/movie/search?q=${text}&apikey=0b2bdeda43b5688921839c8ecb20399b`)
+};
+
+/* 搜索所有分类2 */
+export const searchDoubanMovie2 = text => {
+  return axios.jsonp(`//bird.ioliu.cn/v2/?url=https://movie.douban.com/j/subject_suggest&q=${encodeURIComponent(text)}`)
+};

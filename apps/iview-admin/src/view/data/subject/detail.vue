@@ -2,9 +2,14 @@
   /*@import '../../../styles/common.less';*/
   @import './article-publish.less';
 </style>
+<style>
+  .subject-detail .ivu-form-item {
+    margin-bottom: 5px;
+  }
+</style>
 
 <template>
-  <div v-if="!resetPage">
+  <div v-if="!resetPage" class="subject-detail">
     <Row>
       <Col span="18">
       <Card>
@@ -49,13 +54,13 @@
       <lines v-if="isInit" :subjectId="subjectId"></lines>
       <!--</Card>-->
       <!-- 爬虫 -->
-      <spider v-if="isInit" :subjectId="subjectId"></spider>
+      <spider v-if="isInit" :ownerId="subjectId" :spiderType="1"></spider>
 
       </Col>
       <Col span="6" class="padding-left-10">
       <Card>
         <p slot="title">
-          <Icon type="ios-paper-plane-outline" />
+          <Icon type="ios-paper-plane-outline"/>
           发布
         </p>
         <Form :label-width="80">
@@ -145,7 +150,8 @@
   import {getSubject, saveSubject, getCategorys} from '@/api/data'
 
   import Lines from './lines/lines.vue'
-  import spider from './spider/spider.vue'
+  //  import spider from './spider/spider.vue'
+  import spider from '_v/data/spider/spider.vue'
   import vTags from '../../components/tags'
 
   /* 时间格式 */
