@@ -3,7 +3,7 @@
     <div class="category" v-if="list.results">
         <!--{{ category.name }} - {{ list.count }}-->
         <Row style="" class="category-list" v-if="list.results.length">
-            <Col :xs="12" :sm="6" :md="4" :lg="3" v-for="subject in list.results" :key="subject.id"
+            <Col :xs="12" :sm="6" :md="6" :lg="4" v-for="subject in list.results" :key="subject.id"
                  class="subject">
             <subject-cover :subject="subject" :category="category"></subject-cover>
             </Col>

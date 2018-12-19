@@ -23,7 +23,7 @@
 <template>
     <div class="index">
         <Row style="" v-if="categorys.length">
-            <Col v-for="category in categorys" :key="category.id" span="24" class="category">
+            <Col v-for="category in categorys" :key="category.id" span="24" class="">
             <Card :bordered="true">
                 <p slot="title">
                     <Icon type="ios-film-outline"></Icon>

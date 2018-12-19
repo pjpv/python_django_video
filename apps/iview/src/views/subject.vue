@@ -43,7 +43,34 @@
                         className: 'subjtct-info-label'
                     },
                     {
-                        key: 'content'
+                        key: 'content',
+
+                        render: (h, params) => {
+                            const row = params.row;
+                            const arr = ['标签:', '主演:', '导演:', '地区:', '年代:'];
+                            if (arr.indexOf(row.label) >= 0) {
+                                let text = (row.content + '').split(',');
+                                return h('div', text.map((item, index) => h('Tag', {
+                                    nativeOn: {
+                                        'click': () => {
+                                            let route = {
+                                                name: 'search',
+                                                query: {
+                                                    search: item,
+                                                },
+                                                meta: {
+                                                    title: `搜索-${item}`
+                                                }
+                                            };
+                                            this.$router.push(route);
+                                        }
+                                    }
+                                }, item)));
+
+                            } else {
+                                return h('span', row.content);
+                            }
+                        }
                     }
                 ],
                 lines: [],
@@ -88,7 +115,7 @@
                         content: new Date(s.pub_date).getFullYear()
                     },
                     {
-                        label: '地区',
+                        label: '地区:',
                         content: s.area
 
                     },
@@ -165,7 +192,7 @@
             '$route' (to, from) {
                 console.log('Subject watch init');
 
-                if (to.name === 'subject'  && to.params.id != from.params.id)
+                if (to.name === 'subject' && to.params.id != from.params.id)
                     this.init();
             }
         },

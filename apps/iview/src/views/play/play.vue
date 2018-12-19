@@ -63,6 +63,10 @@
                 })
             },
             init(){
+                this.$Message.warning({
+                    content:'部分视频源自带虚假广告！！！<br>与本站无关，切勿相信！',
+                    duration: 5,
+                })
                 let video_id = this.$route.params.vid;
                 console.log('paly init video_id:', video_id);
 //                this.$store.dispatch('initSubject', video_id);
