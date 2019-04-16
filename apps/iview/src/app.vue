@@ -145,10 +145,10 @@
 </template>
 <script>
 
-    import TopMenu from './components/TopMenu'
-    import TopSider from './components/TopSider'
-    import TopBreadcrumb from './components/TopBreadcrumb'
-    import MyFooter from './components/Footer'
+//    import TopMenu from './components/TopMenu'
+//    import TopSider from './components/TopSider'
+//    import TopBreadcrumb from './components/TopBreadcrumb'
+//    import MyFooter from './components/Footer'
 
     export default {
         data () {
@@ -170,10 +170,14 @@
         },
         methods: {},
         components: {
-            TopMenu: TopMenu,
-            TopSider: TopSider,
-            TopBreadcrumb: TopBreadcrumb,
-            MyFooter: MyFooter,
+//            TopMenu: TopMenu,
+//            TopSider: TopSider,
+//            TopBreadcrumb: TopBreadcrumb,
+//            MyFooter: MyFooter,
+            TopMenu: resolve => {require(['./components/TopMenu'], resolve)},//懒加载,
+            TopSider: resolve => {require(['./components/TopSider'], resolve)},//懒加载,
+            TopBreadcrumb: resolve => {require(['./components/TopBreadcrumb'], resolve)},//懒加载,
+            MyFooter: resolve => {require(['./components/Footer'], resolve)},//懒加载,
         },
     }
 </script>

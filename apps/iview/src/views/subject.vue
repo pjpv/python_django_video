@@ -28,8 +28,8 @@
 
 <script>
 
-    import Lines from '../components/Lines'
-    import loadingCard from '../components/loadingCard.vue'
+//    import Lines from '../components/Lines'
+//    import loadingCard from '../components/loadingCard.vue'
 
     export default {
         name: 'subject',
@@ -197,8 +197,10 @@
             }
         },
         components: {
-            Lines,
-            loadingCard,
+//            Lines,
+//            loadingCard,
+            Lines:resolve => {require(['../components/Lines'], resolve)},//懒加载
+            loadingCard:resolve => {require(['../components/loadingCard'], resolve)},//懒加载
         },
     }
 </script>

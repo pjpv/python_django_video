@@ -58,12 +58,12 @@
 <script>
 
     //    import {getIndexList}  from '../api/api'
-    import SubjectCover from '../components/SubjectCover'
-    import loadingCard from '../components/loadingCard.vue'
+//    import SubjectCover from '../components/SubjectCover'
+//    import loadingCard from '../components/loadingCard.vue'
     export default {
         components: {
-            SubjectCover,
-            loadingCard
+            SubjectCover:resolve => {require(['../components/SubjectCover'], resolve)},//懒加载
+            loadingCard:resolve => {require(['../components/loadingCard'], resolve)},//懒加载
         },
         created(){
             this.init();

@@ -38,10 +38,10 @@
     //    import '../../static/js/flv'
 
 
-    import Lines from '../../components/Lines'
-    import dplayer from './dplayer.vue'
-    import ckplayer from './ckplayer.vue'
-    import Viframe from './iframe.vue'
+//    import Lines from '../../components/Lines'
+//    import dplayer from './dplayer.vue'
+//    import ckplayer from './ckplayer.vue'
+//    import Viframe from './iframe.vue'
 
     export default {
         name: 'play',
@@ -149,10 +149,14 @@
             }
         },
         components: {
-            Lines,
-            dplayer,
-            ckplayer,
-            Viframe,
+//            Lines,
+//            dplayer,
+//            ckplayer,
+//            Viframe,
+            Lines: resolve => {require(['../../components/Lines'], resolve)},//懒加载,
+            dplayer: resolve => {require(['./dplayer.vue'], resolve)},//懒加载,
+            ckplayer: resolve => {require(['./ckplayer'], resolve)},//懒加载,
+            Viframe: resolve => {require(['./iframe'], resolve)},//懒加载,
         }
         ,
         metaInfo: {
